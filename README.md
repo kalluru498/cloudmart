@@ -22,18 +22,19 @@ Let's illustrate the full end-to-end flow with a common customer request: **canc
 ### Scenario: User wants to cancel Order ID `CM-7890`.
 
 **Flow Diagram:**
+```
 +------------------------------------------------------------------+
-|                  Customer Support Assistant: How It Works        |
-|                     (Example: Cancelling an Order)               |
+|                  Customer Support Assistant: How It Works           |
+|                     (Example: Cancelling an Order)                 |
 +------------------------------------------------------------------+
-|                                                                  |
-|  +---------------------+                                         |
-|  |     1. Frontend     |                                         |
-|  | (CustomerSupportPage.jsx) |                                   |
-|  |---------------------|                                         |
-|  | - User types:       |                                         |
-|  |   "Cancel order CM-7890" |                                    |
-|  +----------+----------+                                         |
+|                                                                    |
+|  +---------------------+                                           |
+|  |     1. Frontend     |                                          |
+|  | (CustomerSupportPage.jsx) |                                    |
+|  |---------------------|                                          |
+|  | - User types:       |                                          |
+|  |   "Cancel order CM-7890" |                                     |
+|  +----------+----------+                                          |
 |             |                                                    |
 |             |  HTTP POST: /api/ai/message                        |
 |             |  (Body: {threadId: "...", message: "Cancel..."})   |
@@ -148,7 +149,7 @@ Let's illustrate the full end-to-end flow with a common customer request: **canc
 |  +---------------------+                                         |
 |                                                                  |
 +------------------------------------------------------------------+
-
+```
 
 ### Explanation of the Blocks:
 
