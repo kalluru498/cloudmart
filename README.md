@@ -183,3 +183,119 @@ Let's illustrate the full end-to-end flow with a common customer request: **canc
 ---
 
 This diagram visually represents the complete cycle of an AI-driven action, from user intent to backend execution and final AI confirmation. It highlights how the AI extends beyond mere conversation to leverage your application's backend services through sophisticated function-calling mechanisms.
+
+---
+
+## 3. Project Setup and Local Development
+
+To get the CloudMart Customer Support Assistant up and running on your local machine, follow these steps:
+
+### Prerequisites
+Make sure you have the following installed:
+* Node.js (LTS version recommended)
+* npm (comes with Node.js)
+* AWS CLI (configured with appropriate credentials for DynamoDB and Bedrock)
+
+### Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/cloudmart-ai-assistant.git
+cd cloudmart-ai-assistant
+```
+
+2. Install backend dependencies:
+```bash
+npm install
+```
+(Navigate to the frontend directory and install its dependencies if applicable)
+
+### Configuration
+Create a `.env` file in the root of your backend directory and populate it with your environment variables:
+```
+PORT=5000
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_ASSISTANT_ID=your_openai_assistant_id_here
+AWS_REGION=your_aws_region_here # e.g., us-east-1
+AWS_ACCESS_KEY_ID=your_aws_access_key_id_here
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key_here
+BEDROCK_AGENT_ID=your_bedrock_agent_id_here
+BEDROCK_AGENT_ALIAS_ID=your_bedrock_agent_alias_id_here
+```
+
+* Make sure your OpenAI Assistant is set up with the appropriate tools (e.g., `cancel_order`, `delete_order`) as defined in `aiService.js`.
+* Ensure your Bedrock Agent is configured with relevant actions, potentially including the product recommendations action group handled by `index.js`.
+
+### Database Setup (DynamoDB)
+Ensure you have DynamoDB tables named `cloudmart-orders` and `cloudmart-products` in your configured AWS region. You can create them via the AWS Console or AWS CLI.
+
+Example `cloudmart-orders` table schema:
+* Primary Key: `id` (String)
+* Attributes: `userEmail`, `status`, `createdAt`, etc.
+
+Example `cloudmart-products` table schema:
+* Primary Key: `id` (String)
+* Attributes: `name`, `description`, `price`, `image`, `createdAt`, etc.
+
+You can populate sample product data using the `populateProductsTable()` function (if implemented in your `aiService.js`).
+
+### Running the Application
+1. Start the backend server:
+```bash
+npm start
+```
+The server will typically run on http://localhost:5000.
+
+2. Start the frontend application:
+(Instructions will vary depending on your frontend setup, e.g., `npm start` in the frontend directory).
+
+## 4. API Endpoints
+
+The backend exposes the following API endpoints:
+
+### AI Endpoints (`/api/ai`)
+* **POST `/api/ai/start`**: Starts a new OpenAI conversation thread.
+  * Returns: `{ threadId: string }`
+* **POST `/api/ai/message`**: Sends a message to the OpenAI Assistant and retrieves its response.
+  * Request Body: `{ threadId: string, message: string }`
+  * Returns: `{ response: string }`
+* **POST `/api/ai/bedrock/start`**: Starts a new Bedrock conversation.
+  * Returns: `{ conversationId: string }`
+* **POST `/api/ai/bedrock/message`**: Sends a message to the Bedrock Agent and retrieves its response.
+  * Request Body: `{ conversationId: string, message: string }`
+  * Returns: `{ response: string }`
+
+### Order Endpoints (`/api/orders`)
+* **POST `/api/orders`**: Create a new order
+* **GET `/api/orders`**: Get all orders
+* **GET `/api/orders/user?email={email}`**: Get orders by user email
+* **GET `/api/orders/:id`**: Get order by ID
+* **PUT `/api/orders/:id`**: Update an existing order
+* **DELETE `/api/orders/:id`**: Delete an order
+
+### Product Endpoints (`/api/products`)
+* **GET `/api/products`**: Get all products
+* **GET `/api/products/:id`**: Get product by ID
+* **POST `/api/products`**: Create a new product
+* **PUT `/api/products/:id`**: Update an existing product
+* **DELETE `/api/products/:id`**: Delete a product
+
+## 5. Key Technologies Used
+* **Backend**: Node.js, Express.js
+* **AI Integration**: OpenAI Assistant API, AWS Bedrock Agent Runtime
+* **Database**: AWS DynamoDB
+* **AWS SDKs**: @aws-sdk/client-bedrock-agent-runtime, @aws-sdk/client-dynamodb, @aws-sdk/lib-dynamodb
+* **Utilities**: dotenv, uuid
+* **Frontend**: React (assuming a React frontend based on CustomerSupportPage.jsx)
+
+## 6. Future Enhancements
+* **Enhanced Order Management**: Implement more complex order status workflows (e.g., shipping, delivery)
+* **Product Recommendation Engine**: Leverage AI to provide personalized product recommendations
+* **User Authentication and Authorization**: Integrate a user login system
+* **Customer Profiles**: Allow the AI to access and update customer-specific information
+* **Multi-language Support**: Extend the AI to handle requests in various languages
+
+## 7. Contributing
+We welcome contributions! Please see our CONTRIBUTING.md (if applicable) for guidelines on how to submit pull requests, report issues, and more.
+
+## 8. License
+This project is licensed under the MIT License - see the LICENSE file for details.
